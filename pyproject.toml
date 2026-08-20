@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tda-selector"
+version = "0.1.0"
+description = "Small TDA-based selector for reduced MLIP datasets"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy",
+  "ase",
+  "gudhi",
+  "tqdm",
+  "joblib"
+]
+
+[project.optional-dependencies]
+plot = ["matplotlib", "scikit-learn"]
+test = ["pytest"]
+
+[project.scripts]
+tda-selector = "tda_selector.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
