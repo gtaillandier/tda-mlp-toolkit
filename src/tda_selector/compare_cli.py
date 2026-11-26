@@ -26,7 +26,10 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--seed", type=int, default=42)
     p.add_argument("--fps-indices", default=None, help="Existing selected_indices.txt from an FPS run")
     p.add_argument("--kmeans-indices", default=None, help="Existing selected_indices.txt from a K-means run")
-    p.add_argument("--output", default="selection_comparison.png")
+    p.add_argument("--output", default="selection_comparison.pdf", help="Extension sets the format (.pdf/.svg vector, .png/.tiff 600 dpi)")
+    p.add_argument("--figure-width", choices=["single", "double"], default="single",
+                   help="Journal column width: single (3.5 in) or double (7 in)")
+    p.add_argument("--show-fps-start", action="store_true", help="Mark the FPS start structure")
     p.add_argument("--cluster-colors", action="store_true",
                    help="Colour structures by K-means cluster instead of plain grey")
     p.add_argument("--save-indices", default=None, help="Directory to write fps_indices.txt and kmeans_indices.txt")
@@ -93,7 +96,10 @@ def main(argv=None) -> int:
             np.savetxt(out_dir / "fps_indices.txt", fps, fmt="%d")
             np.savetxt(out_dir / "kmeans_indices.txt", km, fmt="%d")
 
-        out = plot_selection_comparison(features, fps, km, args.output, seed=args.seed, cluster_labels=labels)
+        out = plot_selection_comparison(
+            features, fps, km, args.output, seed=args.seed, cluster_labels=labels,
+            figure_width=args.figure_width, show_fps_start=args.show_fps_start,
+        )
     except (SelectorError, ImportError, ValueError, OSError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 2
