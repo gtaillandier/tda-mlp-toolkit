@@ -17,3 +17,11 @@ python tda_selector.py your_traj.xyz --n-select 20 --output-dir run1
 ```bash
 python tda_selector.py your_traj.xyz --n-select 20 --features-cache feats.npy --output-dir run2
 ```
+
+5. Compare FPS and K-means on the same plot (needs `pip install tda-selector[plot]`):
+
+```bash
+python plot_selection_comparison.py your_traj.xyz --n-select 20 --features-cache feats.npy --output compare.png
+```
+
+The plot shows the full dataset (grey) in the first two PCA components of the TDA features, with FPS picks (red, start point as a star) and K-means picks (blue squares) overlaid. To plot existing runs instead of re-selecting, pass `--fps-indices run1/selected_indices.txt --kmeans-indices run_km/selected_indices.txt`.

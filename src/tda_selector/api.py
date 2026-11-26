@@ -49,6 +49,11 @@ def _load_or_build_features(structures, cfg: RunConfig) -> np.ndarray:
     return features
 
 
+def load_features(cfg: RunConfig) -> tuple[list, np.ndarray]:
+    structures = load_structures(cfg.structures, index=cfg.index)
+    return structures, _load_or_build_features(structures, cfg)
+
+
 def select_structures(cfg: RunConfig) -> RunResult:
     validate_config(cfg)
     seed_everything(cfg.seed)
