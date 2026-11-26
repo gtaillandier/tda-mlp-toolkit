@@ -24,4 +24,4 @@ python tda_selector.py your_traj.xyz --n-select 20 --features-cache feats.npy --
 python plot_selection_comparison.py your_traj.xyz --n-select 20 --features-cache feats.npy --output compare.png
 ```
 
-The plot shows the full dataset (grey) in the first two PCA components of the TDA features, with FPS picks (red, start point as a star) and K-means picks (blue squares) overlaid. To plot existing runs instead of re-selecting, pass `--fps-indices run1/selected_indices.txt --kmeans-indices run_km/selected_indices.txt`.
+The plot shows the full dataset (grey) in the first two PCA components of the TDA features, with FPS picks (red, start point as a star) and K-means picks (squares) overlaid. Structures and K-means picks are coloured by K-means cluster; with `--kmeans-indices` each structure takes the colour of its nearest K-means pick. Use `--no-cluster-colors` for the plain grey view. To plot existing runs instead of re-selecting, pass `--fps-indices run1/selected_indices.txt --kmeans-indices run_km/selected_indices.txt`.

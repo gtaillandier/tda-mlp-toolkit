@@ -20,3 +20,10 @@ def test_fps_normalizes_negative_start() -> None:
     features = np.array([[0.0], [1.0], [5.0]])
     selected, _ = farthest_point_sampling(features, n_select=1, start="-1")
     assert selected == [2]
+
+
+def test_nearest_pick_labels() -> None:
+    from tda_selector.plotting import nearest_pick_labels
+
+    features = np.array([[0.0], [0.2], [5.0], [4.9]])
+    assert nearest_pick_labels(features, [0, 2]).tolist() == [0, 0, 1, 1]

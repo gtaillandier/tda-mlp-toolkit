@@ -44,3 +44,15 @@ def test_compare_plot_uses_existing_indices(tmp_path: Path) -> None:
 
     assert rc == 0
     assert out.exists()
+
+
+def test_compare_plot_without_cluster_colors(tmp_path: Path) -> None:
+    traj = tmp_path / "small.xyz"
+    _write_traj(traj)
+    out = tmp_path / "cmp.png"
+
+    rc = main([str(traj), "--n-select", "3", "--homology-dims", "0", "--resolution", "5", "5",
+               "--n-jobs", "1", "--output", str(out), "--no-cluster-colors"])
+
+    assert rc == 0
+    assert out.exists()

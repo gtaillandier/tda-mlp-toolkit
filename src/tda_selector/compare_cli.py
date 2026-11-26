@@ -8,7 +8,7 @@ from .api import load_features
 from .cli import add_feature_args, add_input_args
 from .errors import SelectorError, ValidationError
 from .models import RunConfig
-from .plotting import plot_selection_comparison
+from .plotting import nearest_pick_labels, plot_selection_comparison
 from .reproducibility import seed_everything
 from .selection import farthest_point_sampling, kmeans_selection
 
@@ -27,6 +27,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--fps-indices", default=None, help="Existing selected_indices.txt from an FPS run")
     p.add_argument("--kmeans-indices", default=None, help="Existing selected_indices.txt from a K-means run")
     p.add_argument("--output", default="selection_comparison.png")
+    p.add_argument("--no-cluster-colors", dest="cluster_colors", action="store_false",
+                   help="Draw all structures in grey instead of colouring by K-means cluster")
     p.add_argument("--save-indices", default=None, help="Directory to write fps_indices.txt and kmeans_indices.txt")
     return p
 
@@ -74,10 +76,16 @@ def main(argv=None) -> int:
         else:
             fps, _ = farthest_point_sampling(features, n_select=args.n_select, min_distance=args.min_distance, start=args.start)
 
+        labels = None
         if args.kmeans_indices:
             km = _read_indices(args.kmeans_indices, n)
         else:
-            km, _ = kmeans_selection(features, args.n_select or len(fps), seed=args.seed, fill_empty=not args.no_fill)
+            km, km_info = kmeans_selection(features, args.n_select or len(fps), seed=args.seed, fill_empty=not args.no_fill)
+            labels = km_info["labels"]
+        if args.cluster_colors and labels is None:
+            labels = nearest_pick_labels(features, km)
+        elif not args.cluster_colors:
+            labels = None
 
         if args.save_indices:
             out_dir = Path(args.save_indices)
@@ -85,7 +93,7 @@ def main(argv=None) -> int:
             np.savetxt(out_dir / "fps_indices.txt", fps, fmt="%d")
             np.savetxt(out_dir / "kmeans_indices.txt", km, fmt="%d")
 
-        out = plot_selection_comparison(features, fps, km, args.output, seed=args.seed)
+        out = plot_selection_comparison(features, fps, km, args.output, seed=args.seed, cluster_labels=labels)
     except (SelectorError, ImportError, ValueError, OSError) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 2

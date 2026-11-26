@@ -97,4 +97,5 @@ def kmeans_selection(
         "inertia": float(km.inertia_),
         "mean_dist_to_centroid": float(np.mean(np.linalg.norm(features[selected] - centers[labels[selected]], axis=1))),
         "empty_clusters": empty,
+        "labels": labels,
     }
