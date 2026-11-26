@@ -10,7 +10,7 @@ def _start_index(features: np.ndarray, mode: str) -> int:
         return int(np.argmin(np.linalg.norm(features - centroid, axis=1)))
     if mode == "random":
         return int(np.random.randint(len(features)))
-    return int(mode)
+    return range(len(features))[int(mode)]
 
 
 def farthest_point_sampling(
