@@ -27,8 +27,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--fps-indices", default=None, help="Existing selected_indices.txt from an FPS run")
     p.add_argument("--kmeans-indices", default=None, help="Existing selected_indices.txt from a K-means run")
     p.add_argument("--output", default="selection_comparison.png")
-    p.add_argument("--no-cluster-colors", dest="cluster_colors", action="store_false",
-                   help="Draw all structures in grey instead of colouring by K-means cluster")
+    p.add_argument("--cluster-colors", action="store_true",
+                   help="Colour structures by K-means cluster instead of plain grey")
     p.add_argument("--save-indices", default=None, help="Directory to write fps_indices.txt and kmeans_indices.txt")
     return p
 
